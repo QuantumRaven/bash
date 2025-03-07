@@ -41,11 +41,11 @@ iso-to-usb () {
 
   local USB
 
-  ISOL="/mnt/kvm/iso"
+  ISOL="/home/quantumcrow/"
 
   printf "\n"
 
-  ls -l /mnt/kvm/iso
+  ls -l "${ISOL}" 
 
   printf "\n"
 
