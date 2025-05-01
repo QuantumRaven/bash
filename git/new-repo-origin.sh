@@ -32,7 +32,15 @@ main() {
 
     read -rep "Git origin link: " ORIGIN_LINK
 
-    git remote add origin ${ORIGIN_LINK}
+    # Check if remote origin already exists
+
+    if git remote get-url origin &>/dev/null; then
+        echo "Remote 'origin' already exists. Updating to remote URL."
+        git remote set-url origin "${ORIGIN_LINK}"
+    else
+        git remote add origin "${ORIGIN_LINK}"
+    fi
+
     git branch -M main
     git push -u origin main
 
