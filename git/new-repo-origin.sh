@@ -32,7 +32,7 @@ main() {
 
     read -rep "Git origin link: " ORIGIN_LINK
 
-    git remote add origin ORIGIN_LINK
+    git remote add origin ${ORIGIN_LINK}
     git branch -M main
     git push -u origin main
 
