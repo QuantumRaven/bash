@@ -41,7 +41,7 @@ iso-to-usb () {
 
   local USB
 
-  ISOL="/home/quantumcrow/"
+  ISOL="/home/$USER/"
 
   printf "\n"
 
