@@ -21,3 +21,7 @@ chmod 644 $HOME/.ssh/crow.pub
 # Set permissions of private keys
 chmod 600 $HOME/.ssh/root
 chmod 600 $HOME/.ssh/crow
+
+# Create authorized_key file and set permissions
+touch $HOME/.ssh/authorized_keys
+chmod 600 $HOME/.ssh/authorized_keys
