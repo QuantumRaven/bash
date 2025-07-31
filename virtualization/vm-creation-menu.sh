@@ -67,28 +67,18 @@ manual-uefi () {
         # Pick OS variant
     PS3='
     Which OS Variant do you wish to use: '
-    options=("Fedora" "NixOS" "Debian" "Arch Linux" "OpenSUSE Leap" "OpenSUSE Tumbleweed" "Generic" "Gentoo" "Rocky" "Windows 10" "Windows 11" "Windows Server 2022" "Android 9.0")
+    options=("Generic" "NixOS" "Rocky") 
     select _ in "${options[@]}"
     do
         case "${REPLY}" in
-            1) OSVARIANT=fedora38 ; break ;;
-            2) OSVARIANT=nixos-23.05 ; break ;;
-            3) OSVARIANT=debian12 ; break ;;
-            4) OSVARIANT=archlinux ; break ;;
-            5) OSVARIANT=opensuse15.5 ; break ;;
-            6) OSVARIANT=opensusetumbleweed ; break ;;
-            7) OSVARIANT=generic ; break ;;
-            8) OSVARIANT=gentoo ; break ;;
-            9) OSVARIANT=rocky9 ; break ;;
-            10) OSVARIANT=win10 ; break ;;
-            11) OSVARIANT=win10 ; break ;;
-            12) OSVARIANT=win2k22 ; break ;;
-            13) OSVARIANT=android-x86-9.0 ; break ;;
+            1) OSVARIANT=generic ; break ;;
+            2) OSVARIANT=nixos-25.05 ; break ;;
+            3) OSVARIANT=rocky10 ; break ;;
         esac
     done
     printf "\n"
 
-    ls -l /mnt/kvm/iso
+    ls -l /mounts/wd_red/virtualization/isos
 
     printf "\n"
 
@@ -99,12 +89,12 @@ manual-uefi () {
         --name "${NAME}" \
         --memory "${MEMORY}" \
         --vcpus "${VCPU}" \
-        --disk path=/mnt/kvm/storage/"${NAME}".qcow2,size="${DISKSIZE}" \
+        --disk path=/mounts/wd_red/virtualization/vdisks/"${NAME}".qcow2,size="${DISKSIZE}" \
         --os-variant "${OSVARIANT}" \
-        --network bridge=vm-bridge \
-        --cdrom /mnt/kvm/iso/"${ISO}" \
-        --graphics spice \
-        --autoconsole none \
+        --network bridge=br0,model=virtio \
+        --location /mounts/wd_red/virtualization/isos/"${ISO}" \
+        --graphics none \
+        --extra-args 'console=tty0 console=ttyS0,115200n8 --- console=tty0 console=ttyS0,115200n8' \ 
         --boot uefi
     
     exit
@@ -112,8 +102,6 @@ manual-uefi () {
 }
 
 manual-bios () {
-
-    # Local variables
 
     # Local variables
 
@@ -150,28 +138,18 @@ manual-bios () {
         # Pick OS variant
     PS3='
     Which OS Variant do you wish to use: '
-    options=("Fedora" "NixOS" "Debian" "Arch Linux" "OpenSUSE Leap" "OpenSUSE Tumbleweed" "Generic" "Gentoo" "Rocky" "Windows 10" "Windows 11" "Windows Server 2022" "Android 9.0")
+    options=("Generic" "NixOS" "Rocky") 
     select _ in "${options[@]}"
     do
         case "${REPLY}" in
-            1) OSVARIANT=fedora38 ; break ;;
-            2) OSVARIANT=nixos-23.05 ; break ;;
-            3) OSVARIANT=debian12 ; break ;;
-            4) OSVARIANT=archlinux ; break ;;
-            5) OSVARIANT=opensuse15.5 ; break ;;
-            6) OSVARIANT=opensusetumbleweed ; break ;;
-            7) OSVARIANT=generic ; break ;;
-            8) OSVARIANT=gentoo ; break ;;
-            9) OSVARIANT=rocky9 ; break ;;
-            10) OSVARIANT=win10 ; break ;;
-            11) OSVARIANT=win10 ; break ;;
-            12) OSVARIANT=win2k22 ; break ;;
-            13) OSVARIANT=android-x86-9.0 ; break ;;
+            1) OSVARIANT=generic ; break ;;
+            2) OSVARIANT=nixos-25.05 ; break ;;
+            3) OSVARIANT=rocky10 ; break ;;
         esac
     done
     printf "\n"
 
-    ls -l /mnt/kvm/iso
+    ls -l /mounts/wd_red/virtualization/isos
 
     printf "\n"
 
@@ -182,12 +160,12 @@ manual-bios () {
         --name "${NAME}" \
         --memory "${MEMORY}" \
         --vcpus "${VCPU}" \
-        --disk path=/mnt/kvm/storage/"${NAME}".qcow2,size="${DISKSIZE}" \
+        --disk path=/mounts/wd_red/virtualization/vdisk/"${NAME}".qcow2,size="${DISKSIZE}" \
         --os-variant "${OSVARIANT}" \
-        --network bridge=vm-bridge \
-        --cdrom /mnt/kvm/iso/"${ISO}" \
-        --graphics spice \
-        --autoconsole none
+        --network bridge=br0,model=virtio \
+        --location /mounts/wd_red/virtualization/isos"${ISO}" \
+        --graphics none \
+        --extra-args 'console=tty0 console=ttyS0,115200n8 --- console=tty0 console=ttyS0,115200n8'
     
     exit    
 
@@ -209,7 +187,6 @@ menu () {
         case "${REPLY}" in        
         1) manual-uefi ;;           
         2) manual-bios ;;
-        # 3) fedora38-server ;;
         *) exit ;;
         esac
     done
