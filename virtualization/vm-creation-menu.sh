@@ -94,7 +94,8 @@ manual-uefi () {
         --network bridge=br0,model=virtio \
         --location /mounts/wd_red/virtualization/isos/"${ISO}" \
         --graphics none \
-        --extra-args "console=tty0" \
+	--console pty,target_type=serial \
+        --extra-args "console=ttys0,115200n8 inst.text" \
         --boot uefi
     
     exit
@@ -160,12 +161,13 @@ manual-bios () {
         --name "${NAME}" \
         --memory "${MEMORY}" \
         --vcpus "${VCPU}" \
-        --disk path=/mounts/wd_red/virtualization/vdisk/"${NAME}".qcow2,size="${DISKSIZE}" \
+        --disk path=/mounts/wd_red/virtualization/vdisks/"${NAME}".qcow2,size="${DISKSIZE}" \
         --os-variant "${OSVARIANT}" \
         --network bridge=br0,model=virtio \
-        --location /mounts/wd_red/virtualization/isos"${ISO}" \
+        --location /mounts/wd_red/virtualization/isos/"${ISO}" \
         --graphics none \
-        --extra-args "console=tty0"
+	--console pty,target_type=serial \
+        --extra-args "console=ttys0,115200n8 inst.text"
     
     exit    
 
