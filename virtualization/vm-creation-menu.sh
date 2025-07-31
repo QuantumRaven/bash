@@ -94,7 +94,7 @@ manual-uefi () {
         --network bridge=br0,model=virtio \
         --location /mounts/wd_red/virtualization/isos/"${ISO}" \
         --graphics none \
-        --extra-args 'console=tty0 console=ttyS0,115200n8 --- console=tty0 console=ttyS0,115200n8' \ 
+        --extra-args "console=tty0" \
         --boot uefi
     
     exit
@@ -165,7 +165,7 @@ manual-bios () {
         --network bridge=br0,model=virtio \
         --location /mounts/wd_red/virtualization/isos"${ISO}" \
         --graphics none \
-        --extra-args 'console=tty0 console=ttyS0,115200n8 --- console=tty0 console=ttyS0,115200n8'
+        --extra-args "console=tty0"
     
     exit    
 
