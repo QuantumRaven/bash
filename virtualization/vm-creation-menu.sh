@@ -49,12 +49,10 @@ manual-uefi () {
     select _ in "${options[@]}"
     do
     case "${REPLY}" in
-      1) MEMORY=512 ; break ;;
-      2) MEMORY=1024 ; break ;;
-      3) MEMORY=2048 ; break ;;
-      4) MEMORY=4096 ; break ;;
-      5) MEMORY=8192 ; break ;;
-      6) MEMORY=16384 ; break ;;
+      1) MEMORY=2048 ; break ;;
+      2) MEMORY=4096 ; break ;;
+      3) MEMORY=8192 ; break ;;
+      4) MEMORY=16384 ; break ;;
     esac
     done
     printf "\n"
@@ -121,12 +119,10 @@ manual-bios () {
     select _ in "${options[@]}"
     do
     case "${REPLY}" in
-      1) MEMORY=512 ; break ;;
-      2) MEMORY=1024 ; break ;;
-      3) MEMORY=2048 ; break ;;
-      4) MEMORY=4096 ; break ;;
-      5) MEMORY=8192 ; break ;;
-      6) MEMORY=16384 ; break ;;
+      1) MEMORY=2048 ; break ;;
+      2) MEMORY=4096 ; break ;;
+      3) MEMORY=8192 ; break ;;
+      4) MEMORY=16384 ; break ;;
     esac
     done
     printf "\n"
