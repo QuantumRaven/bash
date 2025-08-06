@@ -45,7 +45,7 @@ manual-uefi () {
     local MEMORY
     # How much memory
     PS3='How much memory: '
-    options=("512M" "1G" "2G" "4G" "8G" "16G")
+    options=("2G" "4G" "8G" "16G")
     select _ in "${options[@]}"
     do
     case "${REPLY}" in
@@ -115,7 +115,7 @@ manual-bios () {
     local MEMORY
     # How much memory
     PS3='How much memory: '
-    options=("512M" "1G" "2G" "4G" "8G" "16G")
+    options=("2G" "4G" "8G" "16G")
     select _ in "${options[@]}"
     do
     case "${REPLY}" in
