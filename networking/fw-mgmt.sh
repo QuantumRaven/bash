@@ -29,7 +29,7 @@ fw-add-ports () {
 
   read -rep "Port number(s): " PNUM
 
-  firewall-cmd --permanent --zone=public --add-port="${PNUM}"
+  firewall-cmd --permanent --zone=public --add-port="${PNUM}" && sudo firewall-cmd --reload
 
 }
 
@@ -39,15 +39,7 @@ fw-remove-ports () {
 
   read -rep "Port number(s): " PNUM
 
-  firewall-cmd --permanent --zone=public --remove-port="${PNUM}"
-
-}
-
-# Reload firewall
-
-fw-reload () {
-
-  firewall-cmd --reload
+  firewall-cmd --permanent --zone=public --remove-port="${PNUM}" && sudo firewall-cmd --reload
 
 }
 
@@ -63,14 +55,13 @@ fw-list-ports () {
 
 PS3='
 Which firewall command do you wish to run? '
-options=("List port" "Add port" "Remove port" "Reload ports" "exit")
+options=("List port" "Add port" "Remove port" "exit")
 select _ in "${options[@]}"
 do
   case "${REPLY}" in
   1) fw-list-ports ;;
   2) fw-add-ports ;;
   3) fw-remove-ports ;;
-  4) fw-reload ;;
   *) exit ;;
   esac
 done
