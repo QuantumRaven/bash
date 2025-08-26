@@ -41,27 +41,69 @@ SUDO_REQUIRED
 
 a-play () {
 
+    # Example input
+    # asciinema play /path/to/recording.cast
+
     # Local variables
-    local playfile
+    local a_home
+
+    a_home=/home/"$USER"/asciinema/
+
+    local play_file
 
     # List and select a file to play
-    lsd -la /home/quantumcrow/asciinema/
-    read -rep "Select file to play: " playfile
+    lsd -la a_home
+    read -rep "Select file to play: " play_file
 
-    printf "Playing cast file...\n"
-    asciinema play playfile    
-
-}
-
-option2 () {
-
-    printf "option2\n"
+    printf "Playing cast file...\n "
+    asciinema play "$play_file".cast
 
 }
 
-option3 () {
+a-rec () {
 
-    printf "option3\n"
+    # Example input
+    #
+    # asciinema rec /path/to/recording.cast
+
+    # Local variables
+    
+    # Path to asciinema directory
+    local a_home
+
+    a_home=/home/"$USER"/asciinema/
+
+    local rec_file
+
+    # Create file and record
+
+    read -rep "Name of file: " rec_file
+
+    asciinema rec "$a_home""$rec_file".cast
+
+}
+
+a-up () {
+
+    # Example input
+    #
+    # asciinema upload /path/to/recording.cast
+
+    # Local variables
+    
+    # Path to asciinema directory
+
+    local a_home
+
+    a_home=/home/"$USER"/asciinema/
+
+    local up_file
+
+    # Upload file
+
+    read -rep "Choose file to upload: " up_file
+
+    asciinema upload "$a_home""$up_file".cast
     
 }
 
@@ -70,23 +112,23 @@ menu () {
     clear
     printf "
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │1. Option1                                                                                                           │
-    │2. Option2                                                                                                           │
-    │3. Option3                                                                                                           │
+    │1. Play recorded asciinema file                                                                                                           │
+    │2. Record asciinema file                                                                                                           │
+    │3. Upload asciinema file                                                                                                           │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
     \n"
     read -rep "Which command should be executed? "
     case "${REPLY}" in
         1)
-            option1;
+            a-play;
             exit
             ;;
         2)
-            option2;
+            a-rec;
             exit
             ;;
         3)
-            option3;
+            a-up;
             exit
             ;;
     esac
