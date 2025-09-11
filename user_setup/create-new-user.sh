@@ -4,7 +4,7 @@
 
 Author: Chloe Carpenter
 
-Purpose: Menu template 2
+Purpose: Create new user and set up SSH keys and auth
 
 AUTHOR_NOTES
 
@@ -46,3 +46,37 @@ read -rep "Create this user: " NEW_USER
 useradd -m "${NEW_USER}" -G wheel
 
 passwd "${NEW_USER}"
+
+# Set up SSH for new user
+
+# Create ssh dir and config file
+mkdir $HOME/.ssh
+touch $HOME/.ssh/config
+
+# Set permissions
+chmod 700 $HOME/.ssh
+chmod 600 $HOME/.ssh/config
+
+# Create root keys
+ssh-keygen -t ed25519 -f $HOME/.ssh/root
+
+# Create user keys
+ssh-keygen -t ed25519 -f $HOME/.ssh/crow
+
+# Set permissions of .pub keys
+chmod 644 $HOME/.ssh/root.pub
+chmod 644 $HOME/.ssh/crow.pub
+
+# Set permissions of private keys
+chmod 600 $HOME/.ssh/root
+chmod 600 $HOME/.ssh/crow
+
+# Create authorized_key file and set permissions
+touch $HOME/.ssh/authorized_keys
+chmod 600 $HOME/.ssh/authorized_keys
+
+# Add user's pubkey to authorized_keys file
+
+read -rep "User pubkey: " PUBKEY
+
+echo "${PUBKEY}" >> /home/"${NEW_USER}"/.ssh/authorized_keys
