@@ -25,3 +25,9 @@ chmod 600 $HOME/.ssh/crow
 # Create authorized_key file and set permissions
 touch $HOME/.ssh/authorized_keys
 chmod 600 $HOME/.ssh/authorized_keys
+
+# Add user's pubkey to authorized_keys file
+
+read -rep "User pubkey: " PUBKEY
+
+echo "${PUBKEY}" >> /home/"${NEW_USER}"/.ssh/authorized_keys
