@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ###############################
 # Author: Chloe Carpenter
@@ -23,22 +23,28 @@ trap handle_err ERR
 
 convert-video () {
 
+  local INPUT
+
+  local OUTPUT
+
   # Variables
-  read -rep "Input .mkv filename: " INPUT
-  read -rep "Output .mp4 filename: " OUTPUT
+  read -rep "Input filename: " INPUT
+  read -rep "Output filename: " OUTPUT
 
   # Convert files
-  ffmpeg -i "${INPUT}" "${OUTPUT}".mp4
+  ffmpeg -i "${INPUT}" "${OUTPUT}"
 
 }
 
 remove-video () {
 
+  local INPUT
+
   # Variables
-  read -rep "Input .mkv file to delete: " MKV
+  read -rep "Input file to delete: " INPUT
 
   # Remove file
-  rm "${MKV}"
+  rm "${INPUT}"
 
 }
 
