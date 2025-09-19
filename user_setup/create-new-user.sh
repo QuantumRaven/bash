@@ -27,8 +27,6 @@ trap handle_err ERR
 # Uncomment below if script needs to check for sudo perms before running
 # To uncomment, remove the : <<"TEXT" and TEXT
 
-: <<"SUDO_REQUIRED"
-
 if [[ "$EUID" = 0 ]]; then
     echo "Already root, running..."
 else
@@ -36,8 +34,6 @@ else
     sleep 2
     exit 1
 fi
-
-SUDO_REQUIRED
 
 # Create new user and give sudo permissions
 
@@ -49,34 +45,46 @@ passwd "${NEW_USER}"
 
 # Set up SSH for new user
 
-# Create ssh dir and config file
-mkdir $HOME/.ssh
-touch $HOME/.ssh/config
+read -rep "Will the user be connecting to remote hosts: " response
 
-# Set permissions
-chmod 700 $HOME/.ssh
-chmod 600 $HOME/.ssh/config
+if [[ "${response}" == "yes" ]]; then
 
-# Create root keys
-ssh-keygen -t ed25519 -f $HOME/.ssh/root
+    # Create ssh dir and config file
+    mkdir $HOME/.ssh
 
-# Create user keys
-ssh-keygen -t ed25519 -f $HOME/.ssh/crow
+    touch $HOME/.ssh/config
 
-# Set permissions of .pub keys
-chmod 644 $HOME/.ssh/root.pub
-chmod 644 $HOME/.ssh/crow.pub
+    # Set permissions
+    chmod 700 $HOME/.ssh
 
-# Set permissions of private keys
-chmod 600 $HOME/.ssh/root
-chmod 600 $HOME/.ssh/crow
+    chmod 600 $HOME/.ssh/config
+
+    # Create root keys
+    ssh-keygen -t ed25519 -f $HOME/.ssh/root
+
+    # Create user keys
+    ssh-keygen -t ed25519 -f $HOME/.ssh/crow
+
+    # Set permissions of .pub keys
+    chmod 644 $HOME/.ssh/root.pub
+
+    chmod 644 $HOME/.ssh/crow.pub
+
+    # Set permissions of private keys
+    chmod 600 $HOME/.ssh/root
+
+    chmod 600 $HOME/.ssh/crow
+else
+    echo "Not setting up for remote connections..."
+fi
 
 # Create authorized_key file and set permissions
 touch $HOME/.ssh/authorized_keys
+
 chmod 600 $HOME/.ssh/authorized_keys
 
 # Add user's pubkey to authorized_keys file
 
 read -rep "User pubkey: " PUBKEY
 
-echo "${PUBKEY}" >> /home/"${NEW_USER}"/.ssh/authorized_keys
+echo "${PUBKEY}" | tee -a /home/"${NEW_USER}"/.ssh/authorized_keys
