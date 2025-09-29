@@ -37,11 +37,11 @@ fi
 
 # Create new user and give sudo permissions
 
-read -rep "Create this user: " NEW_USER
+read -rep "Create this user: " new_user
 
-useradd -m "${NEW_USER}" -G wheel
+useradd -m "${new_user}" -G wheel
 
-passwd "${NEW_USER}"
+passwd "${new_user}"
 
 # Set up SSH for new user
 
@@ -50,41 +50,41 @@ read -rep "Will the user be connecting to remote hosts: " response
 if [[ "${response}" == "yes" ]]; then
 
     # Create ssh dir and config file
-    mkdir $HOME/.ssh
+    mkdir "${HOME}"/.ssh
 
-    touch $HOME/.ssh/config
+    touch "${HOME}"/.ssh/config
 
     # Set permissions
-    chmod 700 $HOME/.ssh
+    chmod 700 "${HOME}"/.ssh
 
-    chmod 600 $HOME/.ssh/config
+    chmod 600 "${HOME}"/.ssh/config
 
     # Create root keys
-    ssh-keygen -t ed25519 -f $HOME/.ssh/root
+    ssh-keygen -t ed25519 -f "${HOME}"/.ssh/root
 
     # Create user keys
-    ssh-keygen -t ed25519 -f $HOME/.ssh/crow
+    ssh-keygen -t ed25519 -f "${HOME}"/.ssh/"${new_user}"
 
     # Set permissions of .pub keys
-    chmod 644 $HOME/.ssh/root.pub
+    chmod 644 "${HOME}"/.ssh/root.pub
 
-    chmod 644 $HOME/.ssh/crow.pub
+    chmod 644 "${HOME}"/.ssh/"${new_user}".pub
 
     # Set permissions of private keys
-    chmod 600 $HOME/.ssh/root
+    chmod 600 "${HOME}"/.ssh/root
 
-    chmod 600 $HOME/.ssh/crow
+    chmod 600 "${HOME}"/.ssh/"${new_user}"
 else
     echo "Not setting up for remote connections..."
 fi
 
 # Create authorized_key file and set permissions
-touch $HOME/.ssh/authorized_keys
+touch "${HOME}"/.ssh/authorized_keys
 
-chmod 600 $HOME/.ssh/authorized_keys
+chmod 600 "${HOME}"/.ssh/authorized_keys
 
 # Add user's pubkey to authorized_keys file
 
-read -rep "User pubkey: " PUBKEY
+read -rep "User pubkey: " pubkey
 
-echo "${PUBKEY}" | tee -a /home/"${NEW_USER}"/.ssh/authorized_keys
+echo "${pubkey}" | tee -a /home/"${new_user}"/.ssh/authorized_keys
