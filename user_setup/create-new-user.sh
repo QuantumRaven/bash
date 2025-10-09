@@ -28,7 +28,8 @@ trap handle_err ERR
 # To uncomment, remove the : <<"TEXT" and TEXT
 
 if [[ "$EUID" = 0 ]]; then
-    echo "Already root, running..."
+    echo "Running with sudo..."
+    printf "\n"
 else
     printf "Must run with sudo permissions, exiting...\n"
     sleep 2
@@ -39,49 +40,61 @@ fi
 
 read -rep "Create this user: " new_user
 
-useradd -m "${new_user}" -G wheel
+read -rep "Distro: debian or rhel? " distro
 
-passwd "${new_user}"
+if [[ "${distro}" == "debian" ]]; then
+    useradd -m "${new_user}" -G sudo -s /usr/bin/bash
 
-# Set up SSH for new user
+    passwd "${new_user}"
+elif [[ "${distro}" == "rhel" ]]; then
+    useradd -m "${new_user}" -G wheel -s /usr/bin/bash
 
-read -rep "Will the user be connecting to remote hosts: " response
+    password "${new_user}"
+fi
+
+# Create ssh dir and config file
+mkdir /home/"${new_user}"/.ssh
+
+touch /home/"${new_user}"/.ssh/config
+
+# Set permissions
+
+chmod 700 /home/"${new_user}"/.ssh
+
+chmod 600 /home/"${new_user}"/.ssh/config
+
+# Prompt on whether to set up SSH keys for new user
+printf ""
+read -rep "Configure SSH keys: " response
 
 if [[ "${response}" == "yes" ]]; then
-
-    # Create ssh dir and config file
-    mkdir "${HOME}"/.ssh
-
-    touch "${HOME}"/.ssh/config
-
-    # Set permissions
-    chmod 700 "${HOME}"/.ssh
-
-    chmod 600 "${HOME}"/.ssh/config
-
     # Create root keys
-    ssh-keygen -t ed25519 -f "${HOME}"/.ssh/root
+    ssh-keygen -t ed25519 -f /home/"${new_user}"/ssh/root
 
     # Create user keys
-    ssh-keygen -t ed25519 -f "${HOME}"/.ssh/"${new_user}"
+    ssh-keygen -t ed25519 -f /home/"${new_user}"/.ssh/"${new_user}"
 
     # Set permissions of .pub keys
-    chmod 644 "${HOME}"/.ssh/root.pub
+    chmod 644 /home/"${new_user}"/.ssh/root.pub
 
-    chmod 644 "${HOME}"/.ssh/"${new_user}".pub
+    chmod 644 /home/"${new_user}"/.ssh/"${new_user}".pub
 
     # Set permissions of private keys
-    chmod 600 "${HOME}"/.ssh/root
+    chmod 600 /home/"${new_user}"/.ssh/root
 
-    chmod 600 "${HOME}"/.ssh/"${new_user}"
+    chmod 600 /home/"${new_user}"/.ssh/"${new_user}"
 else
-    echo "Not setting up for remote connections..."
+    echo "Not configuring SSH keys..."
 fi
 
 # Create authorized_key file and set permissions
-touch "${HOME}"/.ssh/authorized_keys
+touch /home/"${new_user}"/.ssh/authorized_keys
 
-chmod 600 "${HOME}"/.ssh/authorized_keys
+chmod 600 /home/"${new_user}"/.ssh/authorized_keys
+
+# Set ownership
+
+chown -R "${new_user}":"${new_user}" /home/"${new_user}"/.ssh
 
 # Add user's pubkey to authorized_keys file
 
