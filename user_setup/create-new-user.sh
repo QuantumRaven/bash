@@ -37,7 +37,7 @@ if [[ "${distro}" == "debian" ]]; then
     passwd "${new_user}"
 elif [[ "${distro}" == "rhel" ]]; then
     useradd -m "${new_user}" -G wheel -s /usr/bin/bash
-    password "${new_user}"
+    passwd "${new_user}"
 fi
 
 # Create ssh dir and config file
