@@ -24,31 +24,20 @@ trap handle_err ERR
 ############
 
 # Add fireawll port(s)
-
-fw-add-ports () {
-
+fw-add-ports() {
   read -rep "Port number(s): " PNUM
-
   firewall-cmd --permanent --zone=public --add-port="${PNUM}" && sudo firewall-cmd --reload
-
 }
 
 # Remove firewall port(s)
-
-fw-remove-ports () {
-
+fw-remove-ports() {
   read -rep "Port number(s): " PNUM
-
   firewall-cmd --permanent --zone=public --remove-port="${PNUM}" && sudo firewall-cmd --reload
-
 }
 
 # List ports
-
-fw-list-ports () {
-
+fw-list-ports() {
   firewall-cmd --list-ports
-
 }
 
 # Choose which fw command to run
@@ -59,9 +48,9 @@ options=("List port" "Add port" "Remove port" "exit")
 select _ in "${options[@]}"
 do
   case "${REPLY}" in
-  1) fw-list-ports ;;
-  2) fw-add-ports ;;
-  3) fw-remove-ports ;;
-  *) exit ;;
+  1) fw-list-ports;;
+  2) fw-add-ports;;
+  3) fw-remove-ports;;
+  *) exit;;
   esac
 done
